@@ -1,0 +1,13 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^\.git$
+^\.gitignore$
+^\.github$
+^Dockerfile$
+^docker-compose\.yaml$
+^README\.md$
+^tests/protocol$
+^.*\.log$
+^results$
+^mcpserver_.*\.tar\.gz$
+^.dockerignore$

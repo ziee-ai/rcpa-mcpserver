@@ -1,0 +1,21 @@
+services:
+  rcpa-mcpserver:
+    build: .
+    image: rcpa-mcpserver:latest
+    ports:
+      - "9004:9004"
+      - "9005:9005"
+    environment:
+      RCPA_PORT: "9004"
+      RCPA_STATIC_PORT: "9005"
+      RCPA_HOST: "0.0.0.0"
+      RCPA_STATIC_HOST: "0.0.0.0"
+      RCPA_DAEMONS: "6"
+      BASE_URL: "${BASE_URL:-http://localhost:9005}"
+      RCPA_LOG: "/var/log/rcpa.log"
+    volumes:
+      - rcpa-results:/var/lib/rcpa/results
+    restart: unless-stopped
+
+volumes:
+  rcpa-results:

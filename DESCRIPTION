@@ -1,0 +1,36 @@
+Package: rcpa.mcpserver
+Type: Package
+Title: MCP Server Exposing the RCPA Bioinformatics Toolkit
+Version: 0.1.0
+Authors@R: c(
+    person("Phi", "Bya", email = "hungbya@gmail.com", role = c("aut", "cre"))
+  )
+Description: Exposes RCPA differential expression, pathway, consensus,
+    meta-analysis, and plotting workflows as Model Context Protocol tools
+    over Streamable HTTP. Built on the mcpserver R framework. Each
+    analysis runs in a fresh Rscript subprocess for isolation; results
+    are persisted to disk and served back as resource_link URLs.
+License: GPL-3 | file LICENSE
+Encoding: UTF-8
+Depends:
+    R (>= 4.3)
+Imports:
+    mcpserver,
+    jsonlite,
+    httr2,
+    processx,
+    mirai,
+    nanonext,
+    promises
+Suggests:
+    testthat (>= 3.0.0),
+    withr,
+    mockery,
+    RCPA,
+    SummarizedExperiment,
+    S4Vectors,
+    limma,
+    DESeq2,
+    edgeR
+Config/testthat/edition: 3
+RoxygenNote: 7.3.2
