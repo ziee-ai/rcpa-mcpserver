@@ -5,7 +5,15 @@ ENV RCPA_PORT=9004 \
     RCPA_DAEMONS=6 \
     RCPA_RESULTS_DIR=/var/lib/rcpa/results \
     BASE_URL=http://localhost:9005 \
-    DEBIAN_FRONTEND=noninteractive
+    DEBIAN_FRONTEND=noninteractive \
+    # ---- Authentication (default off; opt-in via docker-compose.auth.yaml)
+    # RCPA_AUTH=on               enable JWT auth + admin REST + admin SPA
+    # MCPSERVER_ADMIN_TOKEN=...  bootstrap admin token (REQUIRED in prod)
+    # RCPA_AUTH_DB=/path/db      SQLite store for users + tokens
+    # RCPA_AUTH_ISSUER=...       JWT iss claim (default http://127.0.0.1:9004)
+    # RCPA_AUTH_AUDIENCE=...     JWT aud claim (default rcpa)
+    # RCPA_AUTH_UI=off           hide the bundled /admin/ui SPA
+    RCPA_AUTH=off
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
       libcurl4-openssl-dev libssl-dev libxml2-dev libsodium-dev \

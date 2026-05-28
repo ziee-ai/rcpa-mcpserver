@@ -131,6 +131,23 @@ if [ "$n_genes" != "3" ]; then
 fi
 echo "[smoke]   OK: validate_input_file returned n_genes=3"
 
+echo "[smoke] step 3b: admin surface MUST NOT be mounted in default (auth off) mode"
+admin_healthz=$(curl -s -o /dev/null -w '%{http_code}' \
+  --max-time 3 -H 'Origin: http://localhost' \
+  "http://localhost:${PORT}/admin/healthz" || echo 000)
+if [ "$admin_healthz" = "200" ]; then
+  echo "[smoke]   FAIL: /admin/healthz returned 200 with RCPA_AUTH=off"
+  exit 1
+fi
+admin_ui=$(curl -s -o /dev/null -w '%{http_code}' \
+  --max-time 3 -H 'Origin: http://localhost' \
+  "http://localhost:${PORT}/admin/ui" || echo 000)
+if [ "$admin_ui" = "200" ]; then
+  echo "[smoke]   FAIL: /admin/ui returned 200 with RCPA_AUTH=off"
+  exit 1
+fi
+echo "[smoke]   OK: /admin/* returns ${admin_healthz}/${admin_ui} (not 200)"
+
 echo "[smoke] step 4: static server serves /results/"
 docker exec "$CTR" sh -c 'mkdir -p /var/lib/rcpa/results/smoke && echo "hello" > /var/lib/rcpa/results/smoke/hi.txt'
 content=$(curl -s "http://localhost:${STATIC_PORT}/results/smoke/hi.txt")
