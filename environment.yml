@@ -1,0 +1,45 @@
+# Conda environment for running and testing rcpa.mcpserver locally.
+#
+#   conda env create -f environment.yml
+#   # mcpserver-r is not yet on CRAN; install from the sibling source tree:
+#   conda run -n rcpa-mcp R CMD INSTALL /data/khoi/home-iso/mcp-hubs/mcpserver-r
+#   conda run -n rcpa-mcp R CMD INSTALL .
+#   conda run -n rcpa-mcp Rscript inst/run-stdio.R      # stdio transport
+#   conda run -n rcpa-mcp Rscript inst/run-http.R       # HTTP transport
+#
+# Heavy RCPA + Bioconductor scientific deps (RCPA, SummarizedExperiment,
+# limma, DESeq2, edgeR, ROntoTools, fgsea, ...) are NOT bundled here — some
+# aren't on conda-forge. Install them via BiocManager inside the env when
+# you need to exercise the analysis tools (test-stdio-tools / test-http
+# heavy paths). The stdio protocol + result_uri tests run without them.
+name: rcpa-mcp
+channels:
+  - conda-forge
+  - bioconda
+dependencies:
+  - r-base>=4.3
+  # build toolchain (compiling any source-only R packages)
+  - make
+  - pkg-config
+  # mcpserver-r runtime deps (covers both packages)
+  - r-r6
+  - r-jsonlite
+  - r-jsonvalidate
+  - r-httr2
+  - r-jose
+  - r-later
+  - r-mirai
+  - r-nanonext
+  - r-processx
+  - r-promises
+  - r-openssl
+  - r-rlang
+  - r-dbi
+  - r-rsqlite
+  # test + dev tooling
+  - r-testthat
+  - r-withr
+  - r-mockery
+  - r-remotes
+  - r-devtools
+  - r-roxygen2

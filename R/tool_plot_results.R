@@ -280,7 +280,7 @@ plot_results_prepare <- function(args) {
       paste0(pt, ".png")
     }
     png_path <- file.path(run$dir, png_fname)
-    png_url <- paste0(base_url(), "/results/", run$run_id, "/", png_fname)
+    png_url <- result_uri(run$run_id, png_fname)
     job_name <- if (nzchar(file_name)) {
       paste0("plot_", pt, "_", file_name)
     } else {

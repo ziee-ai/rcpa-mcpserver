@@ -1,8 +1,8 @@
 # rcpa.mcpserver
 
 MCP server exposing the [RCPA](https://github.com/tinnlab/RCPA)
-bioinformatics toolkit over Streamable HTTP. Built on the
-[mcpserver](../mcpserver-r/) R framework.
+bioinformatics toolkit over **Streamable HTTP** or **stdio**. Built on
+the [mcpserver](../mcpserver-r/) R framework.
 
 Tools exposed:
 
@@ -29,6 +29,63 @@ files at `http://localhost:9005/results/…/<file>.csv` (or `.png`).
 ```sh
 R -e 'devtools::install_local(".", dependencies = TRUE)'
 R -e 'rcpa.mcpserver::run_http_entrypoint()'
+```
+
+## Conda environment
+
+A reproducible env for both `rcpa.mcpserver` and the `mcpserver` R
+framework lives in `environment.yml`:
+
+```sh
+conda env create -f environment.yml
+# mcpserver-r is not on CRAN yet; install from the sibling source tree:
+conda run -n rcpa-mcp R CMD INSTALL /data/khoi/home-iso/mcp-hubs/mcpserver-r
+conda run -n rcpa-mcp R CMD INSTALL .
+
+# HTTP transport
+conda run -n rcpa-mcp Rscript inst/run-http.R
+# stdio transport (for Claude Desktop and similar MCP clients)
+conda run -n rcpa-mcp Rscript inst/run-stdio.R
+```
+
+The conda env intentionally excludes the heavy RCPA + Bioconductor
+scientific stack (`RCPA`, `SummarizedExperiment`, `limma`, `DESeq2`,
+`edgeR`, `ROntoTools`, `fgsea`, ...) — some aren't on conda-forge.
+Install them inside the env via `BiocManager` when you need to exercise
+the analysis tools; the stdio protocol tests and `validate_input_file`
+run without them.
+
+## stdio transport
+
+`inst/run-stdio.R` launches the server over newline-delimited JSON-RPC
+on stdin/stdout. `stdout` is reserved for the protocol; diagnostics go
+to `stderr` (or `RCPA_LOG`). By default tool results are returned as
+`file://` URIs into `RCPA_RESULTS_DIR`, so no HTTP listener is needed.
+
+| Env var | Default | Purpose |
+|---|---|---|
+| `RCPA_RESULTS_MODE` | `file` | `file` → `file://` URIs (no HTTP server). `http` → spawns the static server and emits `http://` URIs. |
+| `RCPA_DAEMONS` | `4` | Mirai worker count |
+| `RCPA_RESULTS_DIR` | `tempdir()/rcpa-results` | Where job output lands |
+| `RCPA_LOG` | unset | When set, redirects stderr to that file |
+| `RCPA_STATIC_PORT` / `RCPA_STATIC_HOST` / `BASE_URL` | — | Only used when `RCPA_RESULTS_MODE=http` |
+
+MCP client config (Claude Desktop format):
+
+```json
+{
+  "mcpServers": {
+    "rcpa": {
+      "command": "conda",
+      "args": ["run", "-n", "rcpa-mcp", "Rscript",
+               "/path/to/rcpa-mcpserver/inst/run-stdio.R"],
+      "env": {
+        "RCPA_RESULTS_MODE": "file",
+        "RCPA_LOG": "/tmp/rcpa-mcp.log"
+      }
+    }
+  }
+}
 ```
 
 ## Configuration

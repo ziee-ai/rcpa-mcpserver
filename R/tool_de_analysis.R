@@ -164,7 +164,7 @@ de_analysis_prepare <- function(args) {
   csv_filename <- paste0(base_name, ".csv")
   rds_path <- file.path(run$dir, paste0(base_name, ".rds"))
   csv_path <- file.path(run$dir, csv_filename)
-  csv_url <- paste0(base_url(), "/results/", run$run_id, "/", csv_filename)
+  csv_url <- result_uri(run$run_id, csv_filename)
 
   tmp_design_json <- tempfile(fileext = ".json")
   jsonlite::write_json(design, tmp_design_json, auto_unbox = TRUE)

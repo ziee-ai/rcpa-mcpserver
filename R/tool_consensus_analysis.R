@@ -399,7 +399,7 @@ consensus_prepare <- function(args, database, pa_methods, org, namespace,
   csv_fname <- paste0(base_name, ".csv")
   rds_path <- file.path(run$dir, paste0(base_name, ".rds"))
   csv_path <- file.path(run$dir, csv_fname)
-  csv_url <- paste0(base_url(), "/results/", run$run_id, "/", csv_fname)
+  csv_url <- result_uri(run$run_id, csv_fname)
 
   job_params <- list(
     input_type = input_type,
