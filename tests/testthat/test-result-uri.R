@@ -96,6 +96,11 @@ test_that("every tool that builds a result URI uses result_uri()", {
   # Regression guard: if a future tool adds a hand-rolled paste0(base_url(),
   # '/results/', ...) string, file:// mode will silently break for it. The
   # helper itself is the only place that pattern is allowed.
+  # Scans the package's R/ source, which only exists in the source tree; under
+  # R CMD check the tests run against the installed package (no R/*.R), so skip
+  # there — same convention as the auth-integration tests.
+  skip_if(nzchar(Sys.getenv("_R_CHECK_PACKAGE_NAME_")),
+          "source-tree-only: R/*.R not present under R CMD check")
   pkg_root <- testthat::test_path("..", "..")
   r_files <- list.files(file.path(pkg_root, "R"),
                         pattern = "^tool_.*\\.R$", full.names = TRUE)
