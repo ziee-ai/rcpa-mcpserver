@@ -12,6 +12,9 @@ Description: Exposes RCPA differential expression, pathway, consensus,
     are persisted to disk and served back as resource_link URLs.
 License: GPL-3 | file LICENSE
 Encoding: UTF-8
+URL: https://github.com/ziee-ai/rcpa-mcpserver
+BugReports: https://github.com/ziee-ai/rcpa-mcpserver/issues
+Additional_repositories: https://ziee-ai.github.io/drat
 Depends:
     R (>= 4.3)
 Imports:

@@ -27,8 +27,7 @@ RUN R -e "install.packages(c('mirai','nanonext','processx','httr2','jsonlite','j
 
 RUN R -e "install.packages('RCPA', repos='https://cloud.r-project.org')"
 
-COPY mcpserver_*.tar.gz /tmp/mcpserver.tar.gz
-RUN R CMD INSTALL /tmp/mcpserver.tar.gz && rm /tmp/mcpserver.tar.gz
+RUN R -e "install.packages('mcpserver', repos=c('https://ziee-ai.github.io/drat','https://cloud.r-project.org'))"
 
 COPY . /tmp/rcpa-mcpserver
 RUN R CMD INSTALL /tmp/rcpa-mcpserver && rm -rf /tmp/rcpa-mcpserver

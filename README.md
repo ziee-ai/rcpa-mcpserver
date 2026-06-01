@@ -2,7 +2,7 @@
 
 MCP server exposing the [RCPA](https://github.com/tinnlab/RCPA)
 bioinformatics toolkit over **Streamable HTTP** or **stdio**. Built on
-the [mcpserver](../mcpserver-r/) R framework.
+the [mcpserver](https://github.com/ziee-ai/mcpserver-r) R framework.
 
 Tools exposed:
 
@@ -14,6 +14,15 @@ Tools exposed:
 | `plot_results` | Volcano, MA, bar, heatmap, forest, venn, network, KEGG-map plots |
 | `run_consensus_analysis` | Combine 2+ PA methods on one dataset |
 | `run_meta_analysis` | Combine DE or PA results across 2+ studies |
+
+## Install
+
+```r
+install.packages("rcpa.mcpserver",
+                 repos = c("https://ziee-ai.github.io/drat", getOption("repos")))
+```
+
+`mcpserver` resolves automatically from the [ziee-ai drat](https://ziee-ai.github.io/drat/). The analysis tools additionally need `RCPA` (CRAN) plus the Bioconductor stack (`SummarizedExperiment`, `limma`, `DESeq2`, `edgeR`).
 
 ## Quick start (Docker)
 
