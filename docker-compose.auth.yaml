@@ -1,0 +1,25 @@
+# Overlay that turns on JWT auth + admin REST + admin SPA.
+# Usage:
+#   export MCPSERVER_ADMIN_TOKEN=$(openssl rand -hex 32)
+#   docker compose -f docker-compose.yaml -f docker-compose.auth.yaml up -d --build
+#
+# The bootstrap token is REQUIRED — the compose file fails fast if it is
+# unset so production deploys never accidentally launch with an
+# auto-generated token that doesn't survive container restart.
+
+services:
+  rcpa-mcpserver:
+    environment:
+      RCPA_AUTH: "on"
+      # `${VAR:?msg}` exits with the message if VAR is unset.
+      MCPSERVER_ADMIN_TOKEN: "${MCPSERVER_ADMIN_TOKEN:?MCPSERVER_ADMIN_TOKEN is required when running the auth overlay}"
+      RCPA_AUTH_DB: "/var/lib/rcpa/auth/auth.db"
+      # Optional overrides; defaults are derived inside the container.
+      # RCPA_AUTH_ISSUER: "https://rcpa.example.com"
+      # RCPA_AUTH_AUDIENCE: "rcpa"
+      # RCPA_AUTH_UI: "on"
+    volumes:
+      - rcpa-auth:/var/lib/rcpa/auth
+
+volumes:
+  rcpa-auth:

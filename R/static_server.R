@@ -135,11 +135,18 @@ run_http_entrypoint <- function(port = NULL,
   message(sprintf("[Info] MCP server listening on /mcp (port %d)", port))
 
   srv <- build_rcpa_server()
-  mcpserver::serve_http(srv, port = port,
-                        host = Sys.getenv("RCPA_HOST", unset = "0.0.0.0"),
-                        path = "/mcp",
-                        allowed_origins = allowed_origins,
-                        require_origin = FALSE,
-                        daemons = daemons,
-                        ...)
+  auth_args <- rcpa_auth_config(port)
+  if (is.null(auth_args)) {
+    message("[Info] Auth: off (unauthenticated)")
+  }
+  do.call(mcpserver::serve_http, c(
+    list(srv,
+         port = port,
+         host = Sys.getenv("RCPA_HOST", unset = "0.0.0.0"),
+         path = "/mcp",
+         allowed_origins = allowed_origins,
+         require_origin = FALSE,
+         daemons = daemons),
+    auth_args,
+    list(...)))
 }

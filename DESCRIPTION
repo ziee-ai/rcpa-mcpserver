@@ -15,14 +15,17 @@ Encoding: UTF-8
 Depends:
     R (>= 4.3)
 Imports:
-    mcpserver,
+    mcpserver (>= 0.1.0),
     jsonlite,
     httr2,
     processx,
     mirai,
     nanonext,
-    promises
+    promises,
+    openssl
 Suggests:
+    DBI (>= 1.2.0),
+    RSQLite (>= 2.3.0),
     testthat (>= 3.0.0),
     withr,
     mockery,
