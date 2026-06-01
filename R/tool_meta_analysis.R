@@ -311,7 +311,7 @@ meta_de_prepare <- function(args, de_method, meta_methods) {
     csv_fname <- paste0(base_name, ".csv")
     rds_path <- file.path(run$dir, paste0(base_name, ".rds"))
     csv_path <- file.path(run$dir, csv_fname)
-    csv_url <- paste0(base_url(), "/results/", run$run_id, "/", csv_fname)
+    csv_url <- result_uri(run$run_id, csv_fname)
     job <- make_job_script(run$dir, base_name, "meta_de_analysis", list(
       studies = study_configs,
       de_method = de_method,
@@ -403,7 +403,7 @@ meta_pa_prepare <- function(args, database, pa_method,
     csv_fname <- paste0(base_name, ".csv")
     rds_path <- file.path(run$dir, paste0(base_name, ".rds"))
     csv_path <- file.path(run$dir, csv_fname)
-    csv_url <- paste0(base_url(), "/results/", run$run_id, "/", csv_fname)
+    csv_url <- result_uri(run$run_id, csv_fname)
     job <- make_job_script(run$dir, base_name, "meta_pa_analysis", list(
       gene_stats_paths = gs_paths,
       pa_method = pa_method,

@@ -427,7 +427,7 @@ pa_prepare <- function(args, databases, methods, org, namespace) {
       rds_path <- file.path(run$dir, paste0(base_name, ".rds"))
       csv_fname <- paste0(base_name, ".csv")
       csv_path <- file.path(run$dir, csv_fname)
-      csv_url <- paste0(base_url(), "/results/", run$run_id, "/", csv_fname)
+      csv_url <- result_uri(run$run_id, csv_fname)
       job_params <- list(
         input_type = input_type,
         method = m,
