@@ -1,0 +1,58 @@
+name: R-CMD-check
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  R-CMD-check:
+    runs-on: ubuntu-latest
+    name: ubuntu-latest (R ${{ matrix.r }})
+    strategy:
+      fail-fast: false
+      matrix:
+        r: ['release', 'devel', 'oldrel-1']
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_KEEP_PKG_SOURCE: yes
+      _R_CHECK_FORCE_SUGGESTS_: false   # heavy RCPA/Bioconductor Suggests are optional
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: r-lib/actions/setup-r@v2
+        with:
+          r-version: ${{ matrix.r }}
+          use-public-rspm: true
+
+      - name: Add the ziee-ai drat to repos (for the mcpserver dependency)
+        shell: Rscript {0}
+        run: |
+          p <- file.path(Sys.getenv("HOME"), ".Rprofile")
+          cat('local({r <- getOption("repos"); r["ZIEEAI"] <- "https://ziee-ai.github.io/drat"; options(repos = r)})\n',
+              file = p, append = TRUE)
+
+      - uses: r-lib/actions/setup-r-dependencies@v2
+        with:
+          dependencies: '"hard"'
+          extra-packages: |
+            any::rcmdcheck
+            any::testthat
+            any::withr
+            any::mockery
+            any::DBI
+            any::RSQLite
+          needs: check
+
+      - uses: r-lib/actions/check-r-package@v2
+        with:
+          args: 'c("--no-manual", "--no-build-vignettes")'
+          build_args: 'c("--no-build-vignettes")'
+          error-on: '"error"'
+          upload-snapshots: true
