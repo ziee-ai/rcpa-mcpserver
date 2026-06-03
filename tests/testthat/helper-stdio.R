@@ -136,7 +136,7 @@ stdio_initialize <- function(server, timeout_ms = 20000) {
 
 # Send a tools/call and return the parsed response envelope.
 stdio_call_tool <- function(server, id, name, arguments = list(),
-                            timeout_ms = 30000) {
+                            timeout_ms = 120000) {
   send_msg(server, list(jsonrpc = "2.0", id = id, method = "tools/call",
                         params = list(name = name, arguments = arguments)))
   read_msg(server, timeout_ms)
