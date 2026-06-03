@@ -7,12 +7,15 @@
 #   conda run -n rcpa-mcp Rscript inst/run-stdio.R      # stdio transport
 #   conda run -n rcpa-mcp Rscript inst/run-http.R       # HTTP transport
 #
-# SummarizedExperiment (the core data container the tools build on) IS bundled
-# below via bioconda. The remaining heavy RCPA + Bioconductor scientific deps
-# (RCPA, limma, DESeq2, edgeR, ROntoTools, fgsea, ...) are NOT bundled here —
-# some aren't on conda-forge/bioconda. Install those via BiocManager inside the
-# env when you need to exercise the analysis tools (test-stdio-tools / test-http
-# heavy paths). The stdio protocol + result_uri tests run without them.
+# RCPA's dependency closure (limma, DESeq2, edgeR, SummarizedExperiment,
+# ROntoTools, fgsea, ...) IS bundled below from conda-forge/bioconda so the
+# analysis tools work. RCPA itself (github tinnlab/RCPA) is NOT on conda —
+# install it after the env exists:
+#   conda run -n rcpa-mcp Rscript -e 'remotes::install_github("tinnlab/RCPA")'
+# CePa (RCPA's optional "CePa" pathway method) is also not on conda — it's an
+# archived CRAN package; install it only if you need that method:
+#   conda run -n rcpa-mcp Rscript -e 'install.packages(
+#     "https://cran.r-project.org/src/contrib/Archive/CePa/CePa_0.8.0.tar.gz", repos=NULL)'
 name: rcpa-mcp
 channels:
   - conda-forge
@@ -37,8 +40,35 @@ dependencies:
   - r-rlang
   - r-dbi
   - r-rsqlite
-  # core Bioconductor data container the analysis tools build on
+  # ---- RCPA analysis stack (RCPA Depends + Imports, on conda) --------------
+  - r-tidyr
+  - r-dplyr
+  - r-ggplot2
+  - r-stringr
+  - r-ggnewscale
+  - r-ggrepel
+  - r-httr
+  - r-ggpattern
+  - r-scales
+  - r-robustrankaggreg
+  - r-irdisplay
+  - r-biocmanager
+  - bioconductor-annotationdbi
+  - bioconductor-biobase
   - bioconductor-summarizedexperiment
+  - bioconductor-s4vectors
+  - bioconductor-deseq2
+  - bioconductor-edger
+  - bioconductor-limma
+  - bioconductor-geoquery
+  - bioconductor-graph
+  # ---- analysis-method deps the tools exercise (RCPA Suggests) ------------
+  - bioconductor-rontotools   # ORA / topology-based pathway analysis
+  - bioconductor-fgsea        # GSEA
+  - r-gsa                     # GSA pathway method
+  - r-meta                    # meta-analysis (meta_de / meta_pa tools)
+  - r-png                     # PNG export in plot_results
+  - r-ggvenn                  # consensus overlap (venn) plots
   # test + dev tooling
   - r-testthat
   - r-withr
