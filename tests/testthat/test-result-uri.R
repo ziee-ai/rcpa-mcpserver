@@ -33,7 +33,7 @@ test_that("result_uri('file') emits a file:// path under results_dir()", {
   expect_identical(uri,
                    paste0("file://",
                           normalizePath(file.path(rdir, "run_X", "out.csv"),
-                                        mustWork = FALSE)))
+                                        mustWork = FALSE, winslash = "/")))
 })
 
 test_that("RCPA_RESULTS_MODE=file env var flips the default to file://", {
