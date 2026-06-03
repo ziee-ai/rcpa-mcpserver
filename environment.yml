@@ -7,10 +7,11 @@
 #   conda run -n rcpa-mcp Rscript inst/run-stdio.R      # stdio transport
 #   conda run -n rcpa-mcp Rscript inst/run-http.R       # HTTP transport
 #
-# Heavy RCPA + Bioconductor scientific deps (RCPA, SummarizedExperiment,
-# limma, DESeq2, edgeR, ROntoTools, fgsea, ...) are NOT bundled here — some
-# aren't on conda-forge. Install them via BiocManager inside the env when
-# you need to exercise the analysis tools (test-stdio-tools / test-http
+# SummarizedExperiment (the core data container the tools build on) IS bundled
+# below via bioconda. The remaining heavy RCPA + Bioconductor scientific deps
+# (RCPA, limma, DESeq2, edgeR, ROntoTools, fgsea, ...) are NOT bundled here —
+# some aren't on conda-forge/bioconda. Install those via BiocManager inside the
+# env when you need to exercise the analysis tools (test-stdio-tools / test-http
 # heavy paths). The stdio protocol + result_uri tests run without them.
 name: rcpa-mcp
 channels:
@@ -36,6 +37,8 @@ dependencies:
   - r-rlang
   - r-dbi
   - r-rsqlite
+  # core Bioconductor data container the analysis tools build on
+  - bioconductor-summarizedexperiment
   # test + dev tooling
   - r-testthat
   - r-withr
