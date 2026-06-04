@@ -25,7 +25,7 @@ result_uri <- function(run_id, filename,
   if (identical(mode, "file")) {
     paste0("file://",
            normalizePath(file.path(results_dir(), run_id, filename),
-                         mustWork = FALSE))
+                         mustWork = FALSE, winslash = "/"))
   } else {
     paste0(base_url(), "/results/", run_id, "/", filename)
   }

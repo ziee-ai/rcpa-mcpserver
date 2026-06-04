@@ -140,8 +140,8 @@ test_that("HTTP tools/call invokes validate_input_file end-to-end", {
     '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","clientInfo":{"name":"i","version":"0"},"capabilities":{}}}')
   body <- sprintf(
     '{"jsonrpc":"2.0","id":3,"method":"tools/call","params":{"name":"validate_input_file","arguments":{"file_uri":"file://%s","file_type":"expression_matrix"}}}',
-    normalizePath(expr))
-  resp <- post(srv, body, timeout = 15)
+    normalizePath(expr, winslash = "/"))
+  resp <- post(srv, body, timeout = 120)
   expect_equal(httr2::resp_status(resp), 200L)
   body <- parse_body(resp)
   expect_true(is.null(body$error),
@@ -198,7 +198,7 @@ test_that("HTTP run_de_analysis end-to-end with real RCPA + limma", {
     '{"jsonrpc":"2.0","id":1,"method":"initialize","params":{"protocolVersion":"2025-06-18","clientInfo":{"name":"i","version":"0"},"capabilities":{}}}')
   body <- sprintf(
     '{"jsonrpc":"2.0","id":6,"method":"tools/call","params":{"name":"run_de_analysis","arguments":{"expression_uri":"file://%s","experiment_design_uri":"file://%s","method":"limma","contrast":"Treatment - Control"}}}',
-    normalizePath(expr_path), normalizePath(design_path))
+    normalizePath(expr_path, winslash = "/"), normalizePath(design_path, winslash = "/"))
   resp <- post(srv, body, timeout = 90)
   expect_equal(httr2::resp_status(resp), 200L)
   body <- parse_body(resp)

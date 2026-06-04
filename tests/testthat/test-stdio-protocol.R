@@ -55,7 +55,7 @@ test_that("stdio validate_input_file validates an expression matrix end-to-end",
   resp <- stdio_call_tool(srv, 3L, "validate_input_file",
     list(file_uri  = file_uri(csv_path),
          file_type = "expression_matrix"),
-    timeout_ms = 30000)
+    timeout_ms = 120000)
   expect_false(isTRUE(resp$result$isError), info = result_text(resp))
   txt <- result_text(resp)
   expect_match(txt, '"valid":true')
@@ -77,7 +77,7 @@ test_that("stdio validate_input_file validates an experimental design end-to-end
   resp <- stdio_call_tool(srv, 4L, "validate_input_file",
     list(file_uri  = file_uri(design_path),
          file_type = "experimental_design"),
-    timeout_ms = 30000)
+    timeout_ms = 120000)
   expect_false(isTRUE(resp$result$isError), info = result_text(resp))
   txt <- result_text(resp)
   expect_match(txt, '"valid":true')

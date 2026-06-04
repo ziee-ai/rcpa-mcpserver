@@ -1,5 +1,5 @@
 file_uri <- function(path) {
-  paste0("file://", normalizePath(path, mustWork = FALSE))
+  paste0("file://", normalizePath(path, mustWork = FALSE, winslash = "/"))
 }
 
 # Tests load via load_all so tests/testthat.R doesn't run; set the
