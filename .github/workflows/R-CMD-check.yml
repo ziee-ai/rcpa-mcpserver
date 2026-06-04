@@ -56,6 +56,24 @@ jobs:
             any::RSQLite
           needs: check
 
+      # setup-r-dependencies caches the library by package version; mcpserver
+      # ships from the drat as 0.1.0 with changing content, so a cache hit can
+      # restore a stale build. Force a fresh install from the drat so the
+      # current mcpserver (e.g. the Windows stdio fix) is always the one tested.
+      - name: Reinstall mcpserver fresh from the ziee-ai drat (bypass stale cache)
+        shell: Rscript {0}
+        run: |
+          install.packages("mcpserver",
+                           repos = "https://ziee-ai.github.io/drat",
+                           type = "source", dependencies = FALSE)
+          has_fix <- grepl("0.05",
+                           paste(deparse(body(mcpserver::serve_io)), collapse = " "),
+                           fixed = TRUE)
+          cat("mcpserver", as.character(packageVersion("mcpserver")),
+              "| stdio fix present:", has_fix, "\n")
+          if (!has_fix)
+            stop("installed mcpserver lacks the stdio Windows fix (stale drat/cache?)")
+
       - uses: r-lib/actions/check-r-package@v2
         with:
           args: 'c("--no-manual", "--no-build-vignettes")'
