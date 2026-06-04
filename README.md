@@ -279,7 +279,7 @@ curl -s -X POST $BASE/admin/users \
 curl -s -X POST $BASE/admin/tokens/mint \
   -H "Authorization: Bearer $ADMIN" -H 'Content-Type: application/json' \
   -d '{"user_id":"<user_id>","name":"laptop","ttl":2592000}'
-# -> {"access_token":"<jwt>", ...}   (the JWT is returned once)
+# -> {"jti":"...","token":"<jwt>","expires_at":...}   (the JWT is the "token" field, returned once)
 
 # 3. the client now calls /mcp with that JWT
 curl -s $BASE/mcp -H "Authorization: Bearer <jwt>" ...
