@@ -3,8 +3,8 @@ services:
     build: .
     image: rcpa-mcpserver:latest
     ports:
-      - "9004:9004"
-      - "9005:9005"
+      - "${RCPA_HOST_PORT:-9004}:9004"
+      - "${RCPA_STATIC_HOST_PORT:-9005}:9005"
     environment:
       RCPA_PORT: "9004"
       RCPA_STATIC_PORT: "9005"
